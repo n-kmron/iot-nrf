@@ -56,3 +56,39 @@ Les noeuds sont coupés en 2 roles sur Thread:
 
 * radio toujours allumée
 * subscribe à l'adresse multicast de tous les routeurs
+* il existe 3 types de FTP : les routeurs, les end devices éligibles à devenir routeur (REED) et les end devices qui ne peuvent pas devenir routeur (FED)
+
+##### Minimal thread device
+
+* ne se subscribe pas aux adresses multicast de tous les routeurs
+* transfère tous les messages vers son parent
+* il en existe 2 types : les minimal end devices (MED) dont l'émetteur-récepteur est toujours on et qui ne doit pas interroger son parent et les sleepy end devices (SED) dont l'émetteur-récepteur est normalement désactivé et se réveille de temps en temps pour interroger son parent
+
+#### Upgrade et downgrade
+
+Quand un REED (FTP) est le seul node voulant rejoindre un réseau Thread, il peut s'upgrade lui-même au rang de routeur.
+
+Quand un routeur n'a aucun enfant, alors il downgrade lui-même au rang de end-device
+
+Le Thread leader est un routeur responsable de gérer les routeurs dans un réseau Thread. Il est dynamiquement élu et il n'y en a qu'un seul par réseau.
+
+Un routeur de frontière (border router) est un routeur capable de transmettre les informations entre un réseau Thread et un réseau non Thread (ex: Wifi)
+
+#### Les partitions
+
+Un réseau Thread peut être coupé en partitions lorsqu'un groupe de devices ne peuvent pas communiquer avec un autre groupe.
+
+Chaque partition fonctionne comme un réseau Thread distinct, avec son propre leader, router assignment mais ont les mêmes niveaux et credentials de sécurité.
+
+
+### L'IPV6 avec Thread
+
+TODO
+
+### Network Discovery
+
+TODO
+
+### La sélection de routeurs
+
+TODO
