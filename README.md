@@ -83,7 +83,22 @@ Chaque partition fonctionne comme un réseau Thread distinct, avec son propre le
 
 ### L'IPV6 avec Thread
 
-TODO
+There are three scopes in a Thread network for unicast addressing:
+
+Link-Local — all interfaces reachable by a single radio transmission
+Mesh-Local — all interfaces reachable within the same Thread network
+Global — all interfaces reachable from outside a Thread network
+The first two scopes correspond to prefixes designated by a Thread network. Link-Local have prefixes of fe80::/16, while Mesh-Local have prefixes of fd00::/8.
+
+multiple IPv6 unicast addresses that identify a single Thread device. Each has a different function based on the scope and use case.
+
+#### the Routing Locator (RLOC).
+
+The RLOC identifies a Thread interface, based on its location in the network topology.
+
+a Routing Locator is generated : All devices are assigned a Router ID and a Child ID. Each Router maintains a table of all their Children, the combination of which uniquely identifies a device within the topology. For example, consider the highlighted nodes in the following topology, where the number in a Router (pentagon) is the Router ID, and the number in an End Device (circle) is the Child ID:
+
+Each Child's Router ID corresponds to their Parent (Router). Because a Router is not a Child, the Child ID for a Router is always 0. Together, these values are unique for each device in the Thread network, and are used to create the RLOC16, which represents the last 16 bits of the RLOC.
 
 ### Network Discovery
 
