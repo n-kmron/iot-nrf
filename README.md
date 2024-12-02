@@ -83,27 +83,39 @@ Chaque partition fonctionne comme un réseau Thread distinct, avec son propre le
 
 ### L'IPV6 avec Thread
 
-There are three scopes in a Thread network for unicast addressing:
+Il existe trois portées dans un réseau Thread pour l'adressage en unicast :
 
-Link-Local — all interfaces reachable by a single radio transmission
-Mesh-Local — all interfaces reachable within the same Thread network
-Global — all interfaces reachable from outside a Thread network
-The first two scopes correspond to prefixes designated by a Thread network. Link-Local have prefixes of fe80::/16, while Mesh-Local have prefixes of fd00::/8.
+Link-Local : toutes les interfaces accessibles par une seule transmission radio
+Mesh-Local : toutes les interfaces accessibles au sein du même réseau Thread
+Global : toutes les interfaces accessibles depuis l'extérieur d'un réseau Thread
+Les deux premières portées correspondent aux préfixes désignés par un réseau Thread. Link-Local a le préfixe fe80::/16, tandis que Mesh-Local a le préfixe fd00::/8.
 
-multiple IPv6 unicast addresses that identify a single Thread device. Each has a different function based on the scope and use case.
+Plusieurs adresses IPv6 en monodiffusion (unicast) qui identifient un seul périphérique Thread. Chacune a une fonction différente en fonction de la portée et du cas d'utilisation.
 
-#### the Routing Locator (RLOC).
+#### The Routing Locator (RLOC).
 
-The RLOC identifies a Thread interface, based on its location in the network topology.
+Un RLOC est généré : tous les périphériques se voient attribuer un ID de routeur et un ID d'enfant. Chaque routeur conserve une table de tous ses enfants, dont la combinaison identifie de manière unique un périphérique dans la topologie. Par exemple, considérons les nœuds mis en surbrillance dans la topologie suivante, où le numéro dans un routeur (pentagone) est l'ID de routeur et le numéro dans un périphérique final (cercle) est l'ID d'enfant :
 
-a Routing Locator is generated : All devices are assigned a Router ID and a Child ID. Each Router maintains a table of all their Children, the combination of which uniquely identifies a device within the topology. For example, consider the highlighted nodes in the following topology, where the number in a Router (pentagon) is the Router ID, and the number in an End Device (circle) is the Child ID:
-
-Each Child's Router ID corresponds to their Parent (Router). Because a Router is not a Child, the Child ID for a Router is always 0. Together, these values are unique for each device in the Thread network, and are used to create the RLOC16, which represents the last 16 bits of the RLOC.
+L'ID de routeur de chaque enfant correspond à son parent (routeur). Étant donné qu'un routeur n'est pas un enfant, l'ID d'enfant d'un routeur est toujours 0. Ensemble, ces valeurs sont uniques pour chaque périphérique du réseau Thread et sont utilisées pour créer le RLOC16, qui représente les 16 derniers bits du RLOC.
 
 ### Network Discovery
 
-TODO
+Les réseaux de threads sont identifiés par trois identifiants uniques :
+
+ID de réseau personnel (PAN ID) sur 2 octets
+ID de réseau personnel étendu (XPAN ID) sur 8 octets
+Un nom de réseau lisible par l'homme
+
+Pour créer un nouveau réseau, il sélectionne le canal le moins occupé et un ID PAN non utilisé par d'autres réseaux, puis devient un routeur et s'élit lui-même comme leader. Cet appareil envoie des messages d'annonce MLE à d'autres appareils 802.15.4 pour les informer de son état de liaison et répond aux demandes de balise des autres appareils Thread effectuant une analyse active.
+
+Pour rejoindre un réseau existant, il configure son canal, son ID PAN, son ID XPAN et son nom de réseau pour qu'ils correspondent à ceux du réseau cible via la mise en service des threads, puis passe par le processus de connexion MLE pour se connecter en tant qu'enfant (appareil final). Ce processus est utilisé pour les liens enfant-parent.
 
 ### La sélection de routeurs
 
-TODO
+Les routeurs doivent former un Connected Dominating Se (CDS), ce qui signifie :
+
+Tout routeur d'un réseau Thread peut atteindre n'importe quel autre routeur en restant entièrement dans l'ensemble de routeurs.
+
+Chaque périphérique final d'un réseau Thread est directement connecté à un routeur.
+
+Un algorithme distribué gère le CDS, ce qui garantit un niveau minimum de redondance. Chaque périphérique se connecte initialement au réseau en tant que périphérique final (enfant). À mesure que l'état du réseau de threads change, l'algorithme ajoute ou supprime des routeurs pour maintenir le CDS.
